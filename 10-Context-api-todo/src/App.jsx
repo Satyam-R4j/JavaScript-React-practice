@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import { TodoProvider } from './contexts/TodoContext';
 import './App.css'
 
@@ -9,6 +9,30 @@ function App() {
     setTodos((prev)=>[{id:Date.now(),...todo},...prev])
   }
   
+  const updatedTodo = (id,todo)=>{
+    setTodos((prev) => prev.map((prevTodo) =>(prevTodo.id === id ? todo : prevTodo)))
+  }
+
+  const deleteTodo = (id)=>{
+    setTodos((prev)=> prev.filter((todo) => todo.id !== id))
+  }
+
+  const toggleComplete = (id) =>{
+    setTodos((prev)=> prev.map((prevTodo)=> prevTodo ===id ? {...prevTodo, completed: !prevTodo.completed}: prevTodo))
+  }
+
+  useEffect(() => {
+    const todos = JSON.parse(localStorage.getItem("todos"))
+    if (todos && todos.length > 0) {
+      setTodos(todos)
+    }
+  }, [ ]);
+
+  useEffect(()=>{
+    localStorage.setItem("todos", JSON.stringify(todos))
+  },[todos])
+  
+
   return (
     <TodoProvider value={{todos,addTodo,updatedTodo,deleteTodo,toggleComplete}}>
       <div className="bg-[#172842] min-h-screen py-8">
