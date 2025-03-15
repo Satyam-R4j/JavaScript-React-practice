@@ -5,14 +5,14 @@ import { Client, Account, ID } from "appwrite";
 
 export class AuthService
 {
-    Client = new Client()
+    client = new Client()
     account
 
     constructor()
     {
-        this.Client.setEndpoint(conf.appwriteUrl)
+        this.client.setEndpoint(conf.appwriteUrl)
             .setProject(conf.appwriteProjectId)
-        this.account = new Account(this.Client)
+        this.account = new Account(this.client)
     }
 
     async createAccount(email, password, name)
@@ -67,7 +67,7 @@ export class AuthService
         // eslint-disable-next-line no-useless-catch
         try
         {
-            await this.Client.account.deleteSessions()
+            await this.client.account.deleteSessions()
         } catch (error)
         {
             throw (error)
